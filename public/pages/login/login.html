@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="kr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>아무말 대잔치 - 로그인</title>
+    <link rel="stylesheet" href="/pages/login/login.css" />
+    <link rel="stylesheet" href="/semantics/header/header.css" />
+    <link rel="stylesheet" href="/semantics/main/main.css" />
+    <script defer src="/semantics/common.js"></script>
+    <script type="module" src="/pages/login/login.js"></script>
+  </head>
+  <body>
+    <header id="app-header"></header>
+    <main>
+      <section class="auth">
+        <h2 class="auth-title">로그인</h2>
+
+        <form class="auth-form" id="loginForm" novalidate>
+          <div class="field">
+            <label for="email" class="label">이메일</label>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              class="input"
+              placeholder="이메일을 입력하세요"
+              required
+            />
+            <p class="helper" id="emailHelp">예: user@example.com</p>
+          </div>
+          <div class="field">
+            <label for="password" class="label">비밀번호</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              class="input"
+              placeholder="비밀번호를 입력하세요"
+              required
+            />
+            <p class="helper">* helper text</p>
+          </div>
+          <div class="actions">
+            <button id="loginButton" type="button" class="btn primary">
+              로그인
+            </button>
+            <a href="/signin" class="btn link">회원가입</a>
+          </div>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>

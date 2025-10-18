@@ -1,0 +1,191 @@
+/* 컨테이너 */
+.post {
+  max-width: 720px;
+  margin: 16px auto 0;
+}
+
+/* 제목 */
+.post-title {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+/* 메타 + 액션 */
+.post-meta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.author {
+  display: grid;
+  grid-template-columns: 40px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  background: linear-gradient(#f3f4f6, #e5e7eb);
+  border: 1px solid #e5e7eb;
+  display: inline-block;
+}
+.avatar.sm {
+  width: 28px;
+  height: 28px;
+}
+.who .name {
+  display: block;
+  font-weight: 700;
+}
+.who .time,
+.time {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.post-actions {
+  display: inline-flex;
+  gap: 8px;
+}
+
+/* 본문 이미지 자리 */
+.post-image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  background: #f3f4f6;
+  border: 1px solid var(--border);
+  margin: 12px 0 14px;
+}
+
+/* 본문 */
+.post-body {
+  line-height: 1.75;
+  word-break: break-word;
+}
+
+/* 통계 칩 */
+.post-stats {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.stat {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px;
+  text-align: center;
+}
+.stat .num {
+  display: block;
+  font-weight: 800;
+  font-size: 18px;
+}
+.stat .label {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* 공용 카드/폼 유틸(페이지 한정) */
+.card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  padding: 16px;
+}
+.label {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
+.textarea {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+}
+.textarea:focus {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.actions.r {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+/* 댓글 리스트 */
+.comment-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+  display: grid;
+  gap: 12px;
+}
+.comment .c-head {
+  display: grid;
+  grid-template-columns: 28px auto auto 1fr auto auto;
+  gap: 8px;
+  align-items: center;
+}
+.comment .c-body {
+  margin: 8px 0 0;
+  line-height: 1.6;
+}
+
+/* 버튼 확장 (main.css의 .btn 기반) */
+.btn.ghost {
+  background: #fff;
+  border-color: var(--border);
+}
+.btn.danger {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+}
+.btn.sm {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+}
+
+/* 확인 모달(dialog) */
+.confirm {
+  width: 360px;
+  max-width: calc(100% - 40px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 18px;
+}
+.confirm h3 {
+  margin: 0 0 6px;
+  font-size: 16px;
+}
+.confirm .sub {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.confirm-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+.confirm::backdrop {
+  background: rgba(0, 0, 0, 0.35);
+}

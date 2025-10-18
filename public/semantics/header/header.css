@@ -1,0 +1,58 @@
+/* ===== Header Base ===== */
+#app-header {
+  position: sticky; /* 스크롤시 상단 고정 */
+  top: 0;
+  z-index: 100;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb; /* 하단 마지널 라인 */
+}
+
+/* 내부 컨테이너 */
+.h-wrap {
+  max-width: 960px; /* 필요시 조정 */
+  margin: 0 auto;
+  height: 56px; /* 헤더 높이 */
+  display: grid;
+  grid-template-columns: 1fr auto 1fr; /* 좌-중앙-우 */
+  align-items: center;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* 중앙 타이틀 */
+.h-title {
+  grid-column: 2 / 3; /* 가운데 정렬 */
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  color: #111827; /* slate-900 */
+}
+
+/* 오른쪽 아바타(이미지 없이 플레이스홀더) */
+.h-avatar {
+  grid-column: 3 / 4;
+  justify-self: end;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: linear-gradient(#f3f4f6, #e5e7eb); /* 회색 그라데이션 */
+  cursor: pointer;
+}
+
+/* 반응형: 작은 화면에서 패딩 축소 */
+@media (max-width: 480px) {
+  .h-wrap {
+    padding: 0 12px;
+    height: 52px;
+  }
+  .h-title {
+    font-size: 18px;
+  }
+  .h-avatar {
+    width: 28px;
+    height: 28px;
+  }
+}

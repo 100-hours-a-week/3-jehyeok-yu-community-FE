@@ -6,5 +6,15 @@ export const saveToken = (t) => {
 };
 
 export const getAccessToken = () => {
-  return sessionStorage.getItem(ACCESS_KEY);
+  try {
+    const v = sessionStorage.getItem(ACCESS_KEY);
+    if (!v || v === "null" || v === "undefined") return null;
+    return v;
+  } catch {
+    return null;
+  }
+};
+
+export const deleteAccessToken = () => {
+  sessionStorage.removeItem(ACCESS_KEY);
 };

@@ -11,6 +11,7 @@ export const login = (body) =>
 export const logout = () =>
   authClient.del("/auth").then((res) => {
     deleteAccessToken();
-    console.log(res);
     window.location.href = "/login";
   });
+
+export const signin = (body) => publicClient.post("/users", body);

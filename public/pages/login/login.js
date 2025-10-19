@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // email.addEventListener("change", (e) => {
   //   createClientApi().post("auth/check-email", e.target);
   // });
-  if (getAccessToken() !== undefined) window.location = "/post-list";
 
   loginButton.addEventListener("click", (e) => {
     login({

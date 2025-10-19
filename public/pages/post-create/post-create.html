@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="/semantics/main/main.css" />
     <link rel="stylesheet" href="/pages/post-create/post-create.css" />
     <script defer type="module" src="/semantics/common.js"></script>
+    <script
+      defer
+      type="module"
+      src="/pages/post-create/post-create.js"
+    ></script>
   </head>
   <body>
     <header id="app-header"></header>
@@ -28,6 +33,7 @@
               placeholder="제목을 입력해주세요. (최대 26글자)"
               required
             />
+            <p class="helper">제목은 26자 이내로 작성해주세요.</p>
           </div>
 
           <!-- 내용 -->
@@ -40,7 +46,7 @@
               placeholder="내용을 입력해주세요."
               required
             ></textarea>
-            <p class="helper">* helper text</p>
+            <p class="helper">게시글 본문은 LONGTEXT로 저장됩니다.</p>
           </div>
 
           <!-- 이미지 업로드 -->
@@ -55,7 +61,9 @@
 
           <!-- 제출 -->
           <div class="actions">
-            <button type="submit" class="btn primary full">완료</button>
+            <button type="button" id="submitButton" class="btn primary full">
+              완료
+            </button>
           </div>
         </form>
       </section>

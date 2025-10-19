@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/semantics/main/main.css" />
     <link rel="stylesheet" href="/pages/signin/signin.css" />
     <script defer type="module" src="/semantics/common.js"></script>
+    <script defer type="module" src="/pages/signin/signin.js"></script>
   </head>
   <body>
     <header id="app-header"></header>
@@ -88,7 +89,9 @@
           </div>
 
           <div class="actions">
-            <button type="submit" class="btn primary">회원가입</button>
+            <button id="signinButton" type="button" class="btn primary">
+              회원가입
+            </button>
             <a href="/login" class="btn link">로그인하러 가기</a>
           </div>
         </form>

@@ -96,7 +96,12 @@
   padding: 0;
   justify-content: center;
 }
-
+.helper.error {
+  color: #e74c3c;
+}
+.helper.ok {
+  color: #2ecc71;
+}
 /* 반응형 */
 @media (max-width: 480px) {
   .auth {

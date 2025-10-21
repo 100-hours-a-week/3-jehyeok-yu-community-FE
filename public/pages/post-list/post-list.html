@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/semantics/main/main.css" />
     <link rel="stylesheet" href="/pages/post-list/post-list.css" />
     <script defer type="module" src="/semantics/common.js"></script>
+    <script defer type="module" src="/pages/post-list/post-list.js"></script>
   </head>
   <body>
     <header id="app-header"></header>
@@ -23,8 +24,7 @@
 
       <!-- 리스트 -->
       <section class="post-list" id="postList">
-        <!-- 카드 1개 예시 (반복) -->
-        <article class="post-card">
+        <!-- <article class="post-card">
           <div class="card-head">
             <h3 class="title">제목 1</h3>
             <time class="time">2021-01-01 00:00:00</time>
@@ -40,10 +40,16 @@
             <span class="avatar"></span>
             <span class="author">더미 작성자 1</span>
           </div>
-        </article>
+        </article> -->
 
         <!-- 필요 시 더 많은 카드가 이어짐 -->
       </section>
+      <div id="sentinel" aria-hidden="true">
+        <div id="loader">...로딩 중...</div>
+        <div id="end-of-list" style="display: none">
+          ...더 이상 데이터가 없습니다...
+        </div>
+      </div>
     </main>
   </body>
 </html>

@@ -15,7 +15,7 @@ const LOGIN = "/login";
   const goto = (url, msg) => {
     if (msg) alert(msg);
     if (url === currentPath) return;
-    location.replace(url);
+    window.location.href = url;
   };
 
   const currentPath = window.location.pathname.replace(/\/+$/, "");
@@ -47,7 +47,6 @@ async function insertHeader() {
     avatar.disabled = false;
     logoutButton.addEventListener("click", (e) => {
       logout();
-      // window.location.href = "/login";
     });
   }
 }

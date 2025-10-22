@@ -19,7 +19,7 @@ const PAGES = [
   "/login",
   "/signin",
   "/post",
-  "/post-create",
+  "/post-form",
   "/post-list",
   "/404",
 ];

@@ -3,6 +3,7 @@
   position: sticky; /* 스크롤시 상단 고정 */
   top: 0;
   z-index: 100;
+  height: 56px;
   background: #ffffff;
   border-bottom: 1px solid #e5e7eb; /* 하단 마지널 라인 */
 }
@@ -85,4 +86,123 @@
     width: 28px;
     height: 28px;
   }
+}
+
+/* 드롭다운: .h-actions 기준으로 절대배치 */
+.h-actions {
+  position: relative;
+}
+
+/* 패널 */
+.menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 180px;
+  background: #e5e7eb;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  animation: menuIn 0.12s ease-out;
+  z-index: 110; /* 헤더 위로 */
+}
+@keyframes menuIn {
+  from {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.menu-item {
+  display: block;
+  width: 100%;
+  padding: 12px 14px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: #111827;
+  font-size: 14px;
+}
+.menu-item:hover {
+  background: #d1d5db;
+}
+
+/* 접근성 상태 토글용 헬퍼 클래스(선택) */
+.h-actions.is-open #profileMenu {
+  display: block;
+}
+
+/* 모달 */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1000;
+}
+.modal {
+  width: 360px;
+  max-width: calc(100% - 32px);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  padding: 18px;
+  animation: pop 0.14s ease-out;
+}
+@keyframes pop {
+  from {
+    transform: scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-title {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+}
+.modal-text {
+  margin: 0 0 16px;
+  text-align: center;
+  color: #6b7280;
+}
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.btn.modal-cancel {
+  height: 40px;
+  border-radius: 10px;
+  border: 0;
+  background: #111827;
+  color: #fff;
+  cursor: pointer;
+}
+.btn.modal-confirm {
+  height: 40px;
+  border-radius: 10px;
+  border: 0;
+  background: #b9a6ff;
+  color: #111827;
+  cursor: pointer;
+}
+
+/* 숨김 공통 */
+[hidden] {
+  display: none !important;
 }

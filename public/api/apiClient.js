@@ -1,5 +1,5 @@
 import { BASE_URL } from "./config.js";
-import { getAccessToken } from "./sessionStorage.js";
+import { deleteAccessToken, getAccessToken } from "./sessionStorage.js";
 
 const make =
   (client, method) =>
@@ -20,7 +20,18 @@ async function baseFetch(path, opt = {}) {
     "Content-Type": "application/json",
     ...(opt.headers || {}),
   };
-  return fetch(BASE_URL + path, { ...opt, headers });
+  try {
+    const res = await fetch(BASE_URL + path, { ...opt, headers });
+
+    if (res.status >= 500) {
+      alert("서버 에러가 발생했습니다. 잠시 후 접속해주세요.");
+      window.location.href = "500";
+      throw new Error();
+    }
+    return res;
+  } catch (e) {
+    throw e;
+  }
 }
 
 export const publicClient = {
@@ -31,13 +42,37 @@ export const publicClient = {
   del: make(baseFetch, "DELETE"),
 };
 
-function authFetch(path, opt = {}) {
+class AuthError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "AuthError";
+  }
+}
+async function authFetch(path, opt = {}) {
   const token = getAccessToken();
   const headers = {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...(opt.headers || {}),
   };
-  return baseFetch(path, { ...opt, credentials: "include", headers });
+
+  try {
+    const res = await baseFetch(path, {
+      ...opt,
+      credentials: "include",
+      headers,
+    });
+
+    if (res.status === 401) {
+      alert("로그인이 필요합니다.");
+      deleteAccessToken();
+      window.location.href = "/login";
+    }
+
+    return res;
+  } catch (e) {
+    console.error("fetch 에러 발생:", e);
+    throw e;
+  }
 }
 
 export const authClient = {

@@ -91,9 +91,12 @@ async function loadAndFetch() {
 
     postCard.className = "post-card";
     postCard.innerHTML = template;
+    postCard.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = `/post/${ele.postId}`;
+    });
     pNode.appendChild(postCard);
   });
-  console.log(dto);
   hasNext = dto.hasNext;
   if (hasNext) {
     lastReadId = dto.lastPostId || null;
@@ -103,7 +106,6 @@ async function loadAndFetch() {
 // 지금은 더 불러올 것이 없다면, 더이상 불러올 수 없는 상황이 됨.
 // 추후 폴링이나, http 이외의 프로토콜을 쓴다면 상태 갱신으로 가능할듯.
 async function observeLoadFetch(entries) {
-  console.log(entries, isLoading);
   if (!entries[0].isIntersecting || isLoading) return;
   isLoading = true;
   await loadAndFetch();

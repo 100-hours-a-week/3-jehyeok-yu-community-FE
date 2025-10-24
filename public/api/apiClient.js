@@ -20,12 +20,12 @@ async function baseFetch(path, opt = {}) {
     "Content-Type": "application/json",
     ...(opt.headers || {}),
   };
+
   try {
     const res = await fetch(BASE_URL + path, { ...opt, headers });
 
     if (res.status >= 500) {
       alert("서버 에러가 발생했습니다. 잠시 후 접속해주세요.");
-      window.location.href = "500";
       throw new Error();
     }
     return res;
@@ -33,7 +33,6 @@ async function baseFetch(path, opt = {}) {
     throw e;
   }
 }
-
 export const publicClient = {
   fetch: (path, opt = {}) => baseFetch(path, opt),
   get: make(baseFetch, "GET"),

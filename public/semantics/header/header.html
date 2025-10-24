@@ -1,7 +1,26 @@
 <div class="h-wrap">
   <h1 class="h-title">아무 말 대잔치</h1>
   <div class="h-actions">
-    <button id="logout" type="button" disabled>로그아웃</button>
-    <button id="h-avatar" aria-label="profile" disabled></button>
+    <div class="h-menu">
+      <button
+        id="h-avatar"
+        aria-label="profile"
+        aria-haspopup="true"
+        aria-expanded="false"
+      ></button>
+
+      <!-- 드롭다운 패널 -->
+      <nav id="profileMenu" class="menu-panel" hidden>
+        <a href="/pages/profile-edit/profile-edit.html" class="menu-item"
+          >회원정보수정</a
+        >
+        <a href="/pages/password-edit/password-edit.html" class="menu-item"
+          >비밀번호수정</a
+        >
+        <button type="button" id="menuLogout" class="menu-item">
+          로그아웃
+        </button>
+      </nav>
+    </div>
   </div>
 </div>

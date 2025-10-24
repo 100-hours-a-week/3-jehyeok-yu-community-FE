@@ -1,11 +1,20 @@
 import { publicClient } from "../../api/apiClient.js";
+import { BASE_URL } from "../../api/config.js";
 import { signin } from "../../api/loginApi.js";
 
+// 텍스트
 const nickname = document.getElementById("nickname");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 const passwordConfirm = document.getElementById("passwordConfirm");
+
+// 제출버튼
 const signinButton = document.getElementById("signinButton");
+
+// 이미지
+const inputImage = document.getElementById("profile");
+const preview = document.getElementById("preview");
+const plus = document.getElementById("plus");
 
 function updateSubmit() {
   signinButton.disabled = ![nickname, email, password, passwordConfirm].every(
@@ -34,7 +43,8 @@ function setOk(input, msg) {
 
 // 검증 규칙
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 간단 이메일 포맷
-const pwLenMin = 8;
+const pwLenMin = 15;
+const pwLenMax = 55;
 const pwReHasLetter = /[A-Za-z]/;
 const pwReHasDigit = /[0-9]/;
 const pwReHasSpecial = /[^A-Za-z0-9]/;
@@ -50,8 +60,11 @@ function validateEmail() {
 function validatePassword() {
   const v = password.value;
   if (!v) return setFail(password, "비밀번호를 입력하세요.");
-  if (v.length < pwLenMin)
-    return setFail(password, `비밀번호는 ${pwLenMin}자 이상이어야 합니다.`);
+  if (v.length < pwLenMin || v.length > 55)
+    return setFail(
+      password,
+      `비밀번호는 ${pwLenMin}자 이상 ${pwLenMax}자 이하이어야 합니다.`
+    );
   if (
     !pwReHasLetter.test(v) ||
     !pwReHasDigit.test(v) ||
@@ -88,7 +101,56 @@ function validateAll() {
   return signinButton.disabled ? false : true;
 }
 
+// 이미지 렌더 관련
+
+let blobUrl;
+let imageId;
+
+function renderEmpty(e) {
+  const helper = e.target.parentNode.parentNode.querySelector(".helper");
+
+  if (blobUrl) {
+    URL.revokeObjectURL(blobUrl);
+    blobUrl = null;
+  }
+  preview.style.backgroundImage = "";
+  plus.style.display = "block";
+  helper.style.display = "block";
+  e.target.style.display = "none";
+}
+
+async function renderImage(e) {
+  const file = e.target.files?.[0];
+  const helper = e.target.parentNode.querySelector(".helper");
+  if (!file || !file.type.startsWith("image/")) {
+    alert("이미지만 업로드 해주세요.");
+    renderEmpty();
+    return;
+  }
+  const formData = new FormData();
+  formData.append("image", file);
+
+  imageId = await fetch(BASE_URL + "/images", {
+    method: "POST",
+    body: formData, // Body에 직접 FormData 객체를 넣습니다.
+  });
+  if (blobUrl) URL.revokeObjectURL(blobUrl);
+  blobUrl = URL.createObjectURL(file);
+
+  preview.style.backgroundImage = `url('${blobUrl}')`;
+  helper.style.display = "none";
+  plus.style.display = "none";
+  removeBtn.style.display = "block";
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  inputImage.addEventListener("change", async (e) => {
+    await renderImage(e);
+  });
+  removeBtn.addEventListener("click", (e) => {
+    renderEmpty(e);
+  });
+
   email.addEventListener("blur", () => {
     validateEmail();
     updateSubmit();

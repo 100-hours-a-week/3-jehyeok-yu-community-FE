@@ -96,6 +96,54 @@
   padding: 0;
   justify-content: center;
 }
+/* 이메일 입력창과 중복검사 버튼 정렬 */
+.field > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#removeBtn {
+  display: none;
+}
+
+.input {
+  flex: 1;
+}
+
+/* 중복 검사 버튼 */
+.btn.dupCheck {
+  height: 44px;
+  padding: 0 14px;
+  font-size: 13px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--brand);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.btn.dupCheck:hover {
+  background-color: #4f46e5;
+}
+.btn.dupCheck {
+  width: 70px;
+  padding: 2px;
+  font-size: 11px;
+  height: 40px;
+}
+
+.field.checkBtn {
+  display: grid;
+  justify-items: right;
+}
+
+.dup {
+  text-align: right;
+}
+
 .helper.error {
   color: #e74c3c;
 }

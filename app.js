@@ -17,7 +17,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // 정적파일 사전 검증 로직 필요
 const PAGES = [
   "/login",
-  "/signin",
+  "/user-form",
   "/post",
   "/post-form",
   "/post-list",

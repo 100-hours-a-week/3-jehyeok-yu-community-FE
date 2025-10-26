@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>아무말 대잔치 - 회원가입</title>
     <link rel="stylesheet" href="/semantics/header/header.css" />
+    <link rel="stylesheet" href="/semantics/footer/footer.css" />
     <link rel="stylesheet" href="/semantics/main/main.css" />
     <link rel="stylesheet" href="/pages/user-form/user-form.css" />
     <script defer type="module" src="/semantics/common.js"></script>
@@ -17,7 +18,7 @@
         <h2 class="pageTitle" id="page-title">회원가입</h2>
         <form class="auth-form" id="signupForm" novalidate>
           <!-- 프로필 사진 -->
-          <div class="profile-upload">
+          <div class="profile-upload" id="sectionProfileImage">
             <label for="profile" class="profile-label">
               <div class="profile-preview" id="preview"></div>
               <span class="plus-icon" id="plus">+</span>
@@ -37,7 +38,7 @@
             <p class="helper">프로필 사진을 선택하세요.</p>
           </div>
 
-          <!-- 이메일 로그인 ㅇ-->
+          <!-- 이메일 로그인 -->
           <div class="field" id="sectionEmail">
             <label for="email" class="label">이메일 *</label>
             <div>
@@ -110,5 +111,8 @@
         </form>
       </section>
     </main>
+    <footer id="app-footer">
+      <div class="f-wrap"></div>
+    </footer>
   </body>
 </html>

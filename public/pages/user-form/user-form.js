@@ -14,62 +14,6 @@ import {
 } from "./validation.js";
 import { VIEW_MODE } from "./viewMode.js";
 
-// // 텍스트
-// const nickname = document.getElementById("nickname");
-// const email = document.getElementById("email");
-// const password = document.getElementById("password");
-// const passwordConfirm = document.getElementById("passwordConfirm");
-
-// // 제출버튼
-// const signinButton = document.getElementById("signinButton");
-
-// // 이미지
-// const inputImage = document.getElementById("profile");
-// const preview = document.getElementById("preview");
-// const plus = document.getElementById("plus");
-
-// 이미지 렌더 관련
-
-// let blobUrl;
-// let imageId;
-
-// function renderEmpty(e) {
-//   const helper = e.target.parentNode.parentNode.querySelector(".helper");
-
-//   if (blobUrl) {
-//     URL.revokeObjectURL(blobUrl);
-//     blobUrl = null;
-//   }
-//   preview.style.backgroundImage = "";
-//   plus.style.display = "block";
-//   helper.style.display = "block";
-//   e.target.style.display = "none";
-// }
-
-// async function renderImage(e) {
-//   const file = e.target.files?.[0];
-//   const helper = e.target.parentNode.querySelector(".helper");
-//   if (!file || !file.type.startsWith("image/")) {
-//     alert("이미지만 업로드 해주세요.");
-//     renderEmpty();
-//     return;
-//   }
-//   const formData = new FormData();
-//   formData.append("image", file);
-
-//   imageId = await fetch(BASE_URL + "/images", {
-//     method: "POST",
-//     body: formData, // Body에 직접 FormData 객체를 넣습니다.
-//   });
-//   if (blobUrl) URL.revokeObjectURL(blobUrl);
-//   blobUrl = URL.createObjectURL(file);
-
-//   preview.style.backgroundImage = `url('${blobUrl}')`;
-//   helper.style.display = "none";
-//   plus.style.display = "none";
-//   removeBtn.style.display = "block";
-// }
-
 document.addEventListener("DOMContentLoaded", async () => {
   // 모드 결정
   const params = new URLSearchParams(window.location.search);
@@ -145,11 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   if (mode !== "signup" && elements.emailSection) {
     if (elements.emailDupButton) {
-      // 버튼 자체를 완전히 없애고 싶으면:
       elements.emailDupButton.style.display = "none";
-      // 버튼 공간도 유지하고 싶으면:
-      // elements.emailDupButton.style.visibility = "hidden";
-      // elements.emailDupButton.disabled = true;
     }
 
     if (elements.emailHelper) {
@@ -158,11 +98,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (elements.email) {
       const email = elements.email;
-      email.value = "1@1.1";
       email.classList.add("readonly");
       email.setAttribute("readonly", "readonly");
       email.placeholder = "";
-      // disabled로 하면 폼 제출 시 값이 안 나가니까 readonly가 적절함
     }
   }
   function refreshButton() {

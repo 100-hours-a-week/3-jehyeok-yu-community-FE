@@ -69,3 +69,25 @@ main {
     padding-right: 12px;
   }
 }
+
+#app-footer {
+  border-top: 1px solid #e5e7eb;
+  background: #fafafa;
+  padding: 16px 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.f-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  text-align: center;
+  min-height: 40px; /* 이게 포인트. 레이아웃 자리 고정 */
+}

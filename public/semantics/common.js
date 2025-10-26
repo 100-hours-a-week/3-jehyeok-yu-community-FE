@@ -41,7 +41,6 @@ async function insertHeader() {
   const token = getAccessToken();
   avatar = document.getElementById("h-avatar");
   if (token) {
-    // 회원 정보 채우는 로직 추가.
     dropdown = document.querySelector("#profileMenu");
 
     const logoutBtn = document.querySelector("#menuLogout");
@@ -55,7 +54,16 @@ async function insertHeader() {
 }
 document.addEventListener("DOMContentLoaded", async () => {
   await insertHeader();
-  console.log(avatar);
+  await (async function () {
+    const mount = document.querySelector("#app-footer .f-wrap");
+    if (!mount || mount.firstElementChild) return;
+    const res = await fetch("/semantics/footer/footer.html");
+    const html = await res.text();
+    const t = document.createElement("template");
+    console.log(t);
+    t.innerHTML = html.trim();
+    mount.appendChild(t.content.firstElementChild);
+  })();
   avatar.addEventListener("click", (e) => {
     dropdown.hidden = !dropdown.hidden;
     const expended = e.target.attributes["aria-expanded"].value;

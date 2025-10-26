@@ -1,199 +1,212 @@
-import { publicClient } from "../../api/apiClient.js";
 import { BASE_URL } from "../../api/config.js";
-import { signin } from "../../api/loginApi.js";
+import {
+  submitPasswordUpdate,
+  submitProfileUpdate,
+  submitSignup,
+} from "./submitHandler.js";
+import {
+  updateSubmitDisabled,
+  validatePassword,
+  validatePasswordAll,
+  validatePasswordConfirm,
+  validateProfileAll,
+  validateSignupAll,
+} from "./validation.js";
+import { VIEW_MODE } from "./viewMode.js";
 
-// 텍스트
-const nickname = document.getElementById("nickname");
-const email = document.getElementById("email");
-const password = document.getElementById("password");
-const passwordConfirm = document.getElementById("passwordConfirm");
+// // 텍스트
+// const nickname = document.getElementById("nickname");
+// const email = document.getElementById("email");
+// const password = document.getElementById("password");
+// const passwordConfirm = document.getElementById("passwordConfirm");
 
-// 제출버튼
-const signinButton = document.getElementById("signinButton");
+// // 제출버튼
+// const signinButton = document.getElementById("signinButton");
 
-// 이미지
-const inputImage = document.getElementById("profile");
-const preview = document.getElementById("preview");
-const plus = document.getElementById("plus");
-
-function updateSubmit() {
-  signinButton.disabled = ![nickname, email, password, passwordConfirm].every(
-    (e) => helperOf(e)?.classList.contains("ok")
-  );
-}
-
-const helperOf = (input) => input.closest(".field")?.querySelector(".helper");
-
-function setHelper(input, msg, state) {
-  const h = helperOf(input);
-  if (!h) return;
-  h.textContent = msg ?? "";
-  h.classList.remove("error", "ok");
-  if (state) h.classList.add(state);
-}
-
-function setFail(input, msg) {
-  setHelper(input, msg, "error");
-  return false;
-}
-function setOk(input, msg) {
-  setHelper(input, msg, "ok");
-  return true;
-}
-
-// 검증 규칙
-const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // 간단 이메일 포맷
-const pwLenMin = 15;
-const pwLenMax = 55;
-const pwReHasLetter = /[A-Za-z]/;
-const pwReHasDigit = /[0-9]/;
-const pwReHasSpecial = /[^A-Za-z0-9]/;
-const nickRe = /^[A-Za-z0-9가-힣]{2,10}$/; // 2~10자, 한/영/숫자
-
-function validateEmail() {
-  const v = email.value.trim();
-  if (!v) return setFail(email, "이메일을 입력하세요.");
-  if (!emailRe.test(v)) return setFail(email, "올바른 이메일 형식이 아닙니다.");
-  return setOk(email, "좋아요.");
-}
-
-function validatePassword() {
-  const v = password.value;
-  if (!v) return setFail(password, "비밀번호를 입력하세요.");
-  if (v.length < pwLenMin || v.length > 55)
-    return setFail(
-      password,
-      `비밀번호는 ${pwLenMin}자 이상 ${pwLenMax}자 이하이어야 합니다.`
-    );
-  if (
-    !pwReHasLetter.test(v) ||
-    !pwReHasDigit.test(v) ||
-    !pwReHasSpecial.test(v)
-  ) {
-    return setFail(password, "영문/숫자/특수문자를 모두 포함하세요.");
-  }
-  validatePasswordConfirm();
-  return setOk(password, "사용 가능한 비밀번호입니다.");
-}
-
-function validatePasswordConfirm() {
-  const v = passwordConfirm.value;
-  if (!v) return setFail(passwordConfirm, "비밀번호를 다시 입력하세요.");
-  if (v !== password.value)
-    return setFail(passwordConfirm, "비밀번호가 일치하지 않습니다.");
-  return setOk(passwordConfirm, "일치합니다.");
-}
-
-function validateNickname() {
-  const v = nickname.value.trim();
-  if (!v) return setFail(nickname, "닉네임을 입력하세요.");
-  if (!nickRe.test(v))
-    return setFail(nickname, "닉네임은 2~10자, 한글/영문/숫자만 가능합니다.");
-  return setOk(nickname, "좋아요.");
-}
-
-function validateAll() {
-  const r1 = validateEmail();
-  const r2 = validatePassword();
-  const r3 = validatePasswordConfirm();
-  const r4 = validateNickname();
-  signinButton.disabled = !(r1 && r2 && r3 && r4);
-  return signinButton.disabled ? false : true;
-}
+// // 이미지
+// const inputImage = document.getElementById("profile");
+// const preview = document.getElementById("preview");
+// const plus = document.getElementById("plus");
 
 // 이미지 렌더 관련
 
-let blobUrl;
-let imageId;
+// let blobUrl;
+// let imageId;
 
-function renderEmpty(e) {
-  const helper = e.target.parentNode.parentNode.querySelector(".helper");
+// function renderEmpty(e) {
+//   const helper = e.target.parentNode.parentNode.querySelector(".helper");
 
-  if (blobUrl) {
-    URL.revokeObjectURL(blobUrl);
-    blobUrl = null;
-  }
-  preview.style.backgroundImage = "";
-  plus.style.display = "block";
-  helper.style.display = "block";
-  e.target.style.display = "none";
-}
+//   if (blobUrl) {
+//     URL.revokeObjectURL(blobUrl);
+//     blobUrl = null;
+//   }
+//   preview.style.backgroundImage = "";
+//   plus.style.display = "block";
+//   helper.style.display = "block";
+//   e.target.style.display = "none";
+// }
 
-async function renderImage(e) {
-  const file = e.target.files?.[0];
-  const helper = e.target.parentNode.querySelector(".helper");
-  if (!file || !file.type.startsWith("image/")) {
-    alert("이미지만 업로드 해주세요.");
-    renderEmpty();
-    return;
-  }
-  const formData = new FormData();
-  formData.append("image", file);
+// async function renderImage(e) {
+//   const file = e.target.files?.[0];
+//   const helper = e.target.parentNode.querySelector(".helper");
+//   if (!file || !file.type.startsWith("image/")) {
+//     alert("이미지만 업로드 해주세요.");
+//     renderEmpty();
+//     return;
+//   }
+//   const formData = new FormData();
+//   formData.append("image", file);
 
-  imageId = await fetch(BASE_URL + "/images", {
-    method: "POST",
-    body: formData, // Body에 직접 FormData 객체를 넣습니다.
-  });
-  if (blobUrl) URL.revokeObjectURL(blobUrl);
-  blobUrl = URL.createObjectURL(file);
+//   imageId = await fetch(BASE_URL + "/images", {
+//     method: "POST",
+//     body: formData, // Body에 직접 FormData 객체를 넣습니다.
+//   });
+//   if (blobUrl) URL.revokeObjectURL(blobUrl);
+//   blobUrl = URL.createObjectURL(file);
 
-  preview.style.backgroundImage = `url('${blobUrl}')`;
-  helper.style.display = "none";
-  plus.style.display = "none";
-  removeBtn.style.display = "block";
-}
+//   preview.style.backgroundImage = `url('${blobUrl}')`;
+//   helper.style.display = "none";
+//   plus.style.display = "none";
+//   removeBtn.style.display = "block";
+// }
 
-document.addEventListener("DOMContentLoaded", () => {
-  inputImage.addEventListener("change", async (e) => {
-    await renderImage(e);
-  });
-  removeBtn.addEventListener("click", (e) => {
-    renderEmpty(e);
-  });
+document.addEventListener("DOMContentLoaded", async () => {
+  // 모드 결정
+  const params = new URLSearchParams(window.location.search);
+  const mode = params.get("mode") ?? "signup";
 
-  email.addEventListener("blur", () => {
-    validateEmail();
-    updateSubmit();
-  });
-  email.addEventListener("input", () => {
-    validateEmail();
-    updateSubmit();
-  });
+  const spec = VIEW_MODE[mode];
+  const elements = {
+    nickname: document.getElementById("nickname"),
+    email: document.getElementById("email"),
+    password: document.getElementById("password"),
+    passwordConfirm: document.getElementById("passwordConfirm"),
 
-  nickname.addEventListener("blur", () => {
-    validateNickname();
-    updateSubmit();
-  });
-  nickname.addEventListener("input", () => {
-    validateNickname();
-    updateSubmit();
-  });
+    profileInput: document.getElementById("profile"),
+    previewEl: document.getElementById("preview"),
+    plusEl: document.getElementById("plus"),
+    removeBtnEl: document.getElementById("removeBtn"),
+    helperProfileEl: document.querySelector("#sectionProfileImage .helper"),
 
-  password.addEventListener("input", () => {
-    validatePassword();
-    updateSubmit();
-  });
-  passwordConfirm.addEventListener("input", () => {
-    validatePasswordConfirm();
-    updateSubmit();
-  });
-  signinButton.addEventListener("click", async (e) => {
-    e.preventDefault();
-    validateAll();
-    if (signinButton.disabled) return;
+    //이메일 내부
+    emailSection: document.getElementById("sectionEmail"),
+    emailDupButton: document.getElementById("emailDupButton"),
+    emailHelper: document.getElementById("emailHelper"),
+  };
 
-    const res = await signin({
-      email: email.value.trim(),
-      nickname: nickname.value.trim(),
-      password: password.value,
-    });
-    if (res.status === 200) {
-      alert("회원가입이 완료되었습니다.");
-      window.location.href = "/login";
+  // 검증/제출 핸들러 설정
+  const validateHandler =
+    mode === "signup"
+      ? validateSignupAll
+      : mode === "profile"
+      ? validateProfileAll
+      : validatePasswordAll;
+
+  const submitHandler =
+    mode === "signup"
+      ? submitSignup
+      : mode === "profile"
+      ? submitProfileUpdate
+      : submitPasswordUpdate;
+
+  // 고정 요소 설정
+  const pageTitle = document.getElementById("page-title");
+  const submitBtn = document.getElementById("submit-button");
+  const backLink = document.getElementById("back-link");
+  pageTitle.textContent = spec.title;
+  submitBtn.textContent = spec.submitText;
+  backLink.textContent = spec.backLinkText;
+  backLink.href = spec.backLinkHref;
+
+  const sectionIds = [
+    "sectionProfileImage",
+    "sectionEmail",
+    "sectionNickname",
+    "sectionPassword",
+    "sectionPasswordConfirm",
+  ];
+
+  sectionIds.forEach((id) => {
+    const sec = document.getElementById(id);
+    if (!sec) return;
+    const active = spec.show.includes(id);
+
+    if (active) {
+      sec.style.display = "";
+      sec.querySelectorAll("input, button, select, textarea").forEach((n) => {
+        n.disabled = false;
+      });
     } else {
-      alert("회원가입에 실패했습니다.");
+      sec.style.display = "none";
+      sec.querySelectorAll("input, button, select, textarea").forEach((n) => {
+        n.disabled = true;
+      });
+    }
+  });
+  if (mode !== "signup" && elements.emailSection) {
+    if (elements.emailDupButton) {
+      // 버튼 자체를 완전히 없애고 싶으면:
+      elements.emailDupButton.style.display = "none";
+      // 버튼 공간도 유지하고 싶으면:
+      // elements.emailDupButton.style.visibility = "hidden";
+      // elements.emailDupButton.disabled = true;
     }
 
-    updateSubmit();
+    if (elements.emailHelper) {
+      elements.emailHelper.classList.add("is-hidden");
+    }
+
+    if (elements.email) {
+      const email = elements.email;
+      email.value = "1@1.1";
+      email.classList.add("readonly");
+      email.setAttribute("readonly", "readonly");
+      email.placeholder = "";
+      // disabled로 하면 폼 제출 시 값이 안 나가니까 readonly가 적절함
+    }
+  }
+  function refreshButton() {
+    const ok = validateHandler(elements);
+    updateSubmitDisabled(submitBtn, ok);
+  }
+
+  if (elements.email) {
+    elements.email.addEventListener("input", () => {
+      validateEmail(elements.email);
+      refreshButton();
+    });
+    elements.email.addEventListener("blur", () => {
+      validateEmail(elements.email);
+      refreshButton();
+    });
+  }
+
+  if (elements.nickname) {
+    elements.nickname.addEventListener("input", () => {
+      validateNickname(elements.nickname);
+      refreshButton();
+    });
+  }
+
+  if (elements.password) {
+    elements.password.addEventListener("input", () => {
+      validatePassword(elements.password, elements.passwordConfirm);
+      refreshButton();
+    });
+  }
+
+  if (elements.passwordConfirm) {
+    elements.passwordConfirm.addEventListener("input", () => {
+      validatePasswordConfirm(elements.password, elements.passwordConfirm);
+      refreshButton();
+    });
+  }
+
+  refreshButton();
+  submitBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    refreshButton();
+    if (submitBtn.disabled) return;
+    await submitHandler(elements);
   });
 });

@@ -14,7 +14,7 @@
     <header id="app-header"></header>
     <main>
       <section class="auth">
-        <h2 class="auth-title">회원가입</h2>
+        <h2 class="pageTitle" id="page-title">회원가입</h2>
         <form class="auth-form" id="signupForm" novalidate>
           <!-- 프로필 사진 -->
           <div class="profile-upload">
@@ -38,7 +38,7 @@
           </div>
 
           <!-- 이메일 로그인 ㅇ-->
-          <div class="field">
+          <div class="field" id="sectionEmail">
             <label for="email" class="label">이메일 *</label>
             <div>
               <input
@@ -51,14 +51,16 @@
                 autocomplete="email"
                 required
               />
-              <button type="button" class="btn dupCheck">중복 검사</button>
+              <button type="button" class="btn dupCheck" id="emailDupButton">
+                중복 검사
+              </button>
             </div>
 
-            <p class="helper">example@example.com</p>
+            <p class="helper" id="emailHelper">example@example.com</p>
           </div>
 
           <!-- 비밀번호 -->
-          <div class="field">
+          <div class="field" id="sectionPassword">
             <label for="password" class="label">비밀번호 *</label>
             <input
               id="password"
@@ -72,7 +74,7 @@
           </div>
 
           <!-- 비밀번호 확인 -->
-          <div class="field">
+          <div class="field" id="sectionPasswordConfirm">
             <label for="passwordConfirm" class="label">비밀번호 확인 *</label>
             <input
               id="passwordConfirm"
@@ -86,7 +88,7 @@
           </div>
 
           <!-- 닉네임 -->
-          <div class="field">
+          <div class="field" id="sectionNickname">
             <label for="nickname" class="label">닉네임 *</label>
             <input
               id="nickname"
@@ -100,10 +102,10 @@
           </div>
 
           <div class="actions">
-            <button id="signinButton" type="button" class="btn primary">
+            <button id="submit-button" type="button" class="btn primary">
               회원가입
             </button>
-            <a href="/login" class="btn link">로그인하러 가기</a>
+            <a href="/login" class="btn link" id="back-link">로그인하러 가기</a>
           </div>
         </form>
       </section>

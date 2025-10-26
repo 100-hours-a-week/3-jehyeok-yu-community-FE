@@ -17,9 +17,9 @@ app.use(express.static(path.join(__dirname, "public")));
 // 정적파일 사전 검증 로직 필요
 const PAGES = [
   "/login",
-  "/signin",
+  "/user-form",
   "/post",
-  "/post-create",
+  "/post-form",
   "/post-list",
   "/404",
 ];
@@ -38,6 +38,11 @@ app.use(PAGES, (req, res) => {
 
 // catch 404, PAGES로 관리되지 않는 경로 탐색 시 404
 app.use((req, res) => {
+  if (req.path === "/" || req.path === undefined) {
+    res.redirect("/login");
+    return;
+  }
+
   res
     .status(404)
     .sendFile(path.join(__dirname, "public", "pages", "404", "404.html"));

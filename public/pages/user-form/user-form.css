@@ -9,7 +9,7 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
 }
 
-.auth-title {
+.pageTitle {
   margin: 0 0 20px;
   font-size: 22px;
   font-weight: 800;
@@ -96,6 +96,54 @@
   padding: 0;
   justify-content: center;
 }
+/* 이메일 입력창과 중복검사 버튼 정렬 */
+.field > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#removeBtn {
+  display: none;
+}
+
+.input {
+  flex: 1;
+}
+
+/* 중복 검사 버튼 */
+.btn.dupCheck {
+  height: 44px;
+  padding: 0 14px;
+  font-size: 13px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--brand);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  white-space: nowrap;
+}
+
+.btn.dupCheck:hover {
+  background-color: #4f46e5;
+}
+.btn.dupCheck {
+  width: 70px;
+  padding: 2px;
+  font-size: 11px;
+  height: 40px;
+}
+
+.field.checkBtn {
+  display: grid;
+  justify-items: right;
+}
+
+.dup {
+  text-align: right;
+}
+
 .helper.error {
   color: #e74c3c;
 }
@@ -112,4 +160,25 @@
     width: 96px;
     height: 96px;
   }
+}
+
+/* 읽기전용 모드 */
+.input.readonly {
+  border: none;
+  background-color: transparent;
+  color: #666;
+  padding-left: 0; /* 선택: 더 라벨처럼 보이고 싶으면 */
+  cursor: default;
+}
+
+/* 버튼 숨길 때 자리까지 무너지면 안 되는 경우를 대비해 버튼 자리는 flex-gap으로 제어 */
+.email-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* helper 숨길 때 레이아웃은 유지하고 싶다 = 높이는 유지하고 내용은 비워버리기 */
+.helper.is-hidden {
+  visibility: hidden; /* display:none이 아니라 visibility:hidden이면 공간은 남는다 */
 }

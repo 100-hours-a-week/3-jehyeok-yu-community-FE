@@ -1,5 +1,9 @@
 import { BASE_URL } from "./config.js";
-import { deleteAccessToken, getAccessToken } from "./sessionStorage.js";
+import {
+  deleteAccessToken,
+  getAccessToken,
+  saveToken,
+} from "./sessionStorage.js";
 
 const make =
   (client, method) =>
@@ -47,10 +51,28 @@ class AuthError extends Error {
     this.name = "AuthError";
   }
 }
-async function authFetch(path, opt = {}) {
+
+function refreshFaild() {
+  alert("로그인이 필요합니다.");
+  deleteAccessToken();
+  window.location.href = "/login";
+}
+
+function makeAuth() {
+  const token = getAccessToken();
+  return token
+    ? {
+        Authorization: `Bearer ${token}`,
+      }
+    : {};
+}
+
+async function authFetch(path, opt = {}, depth = 0) {
+  if (depth > 1) throw new Error("리프래시 실패");
+
   const token = getAccessToken();
   const headers = {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...makeAuth(),
     ...(opt.headers || {}),
   };
 
@@ -60,14 +82,35 @@ async function authFetch(path, opt = {}) {
       credentials: "include",
       headers,
     });
+    if (res.status !== 401) {
+      return res;
+    }
+    const data = await res.json();
 
-    if (res.status === 401) {
-      alert("로그인이 필요합니다.");
-      deleteAccessToken();
-      window.location.href = "/login";
+    if (data.error.code === "LOGIN_REQUIRED") {
+      refreshFaild();
+      return res;
     }
 
-    return res;
+    const refreshRes = await baseFetch("/auth", {
+      method: "PUT",
+      credentials: "include",
+    });
+
+    if (!refreshRes.success) {
+      refreshFaild();
+      return res;
+    }
+    const refreshJson = await refreshRes.json();
+    const newAccess = refreshJson?.accessToken;
+    if (!newAccess) {
+      refreshFaild();
+      return res;
+    }
+
+    saveToken(newAccess);
+
+    return authFetch(path, { ...opt, headers: makeAuth() }, depth + 1);
   } catch (e) {
     console.error("fetch 에러 발생:", e);
     throw e;

@@ -6,9 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const password = document.getElementById("password");
   const loginButton = document.getElementById("loginButton");
 
-  // email.addEventListener("change", (e) => {
-  //   createClientApi().post("auth/check-email", e.target);
-  // });
+  // check email 구현
 
   loginButton.addEventListener("click", (e) => {
     login({

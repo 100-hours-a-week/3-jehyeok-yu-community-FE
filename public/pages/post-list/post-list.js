@@ -112,4 +112,4 @@ async function observeLoadFetch(entries) {
   isLoading = false;
 }
 
-document.addEventListener("DOMContentLoaded", loadAndFetch);
+// document.addEventListener("DOMContentLoaded", () => loadAndFetch());

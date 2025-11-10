@@ -3,7 +3,6 @@ import { getAccessToken } from "../api/sessionStorage.js";
 
 const pages = {
   NON_AUTH: ["signin", "login"],
-  // AUTH: ["post-list", "post-create", "post"],
 };
 
 const HOME = "post-list";
@@ -18,7 +17,6 @@ const LOGIN = "login";
   };
 
   const currentPath = window.location.pathname.split("/")[1];
-  // const isAuth = pages.AUTH.includes(currentPath);
   const isNon = pages.NON_AUTH.includes(currentPath);
   if (isNon && at) goto(HOME, "로그인 된 상태입니다. 홈으로 이동합니다.");
 })();

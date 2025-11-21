@@ -1,6 +1,7 @@
-import { signin } from "../../api/loginApi.js";
+import { signin } from "../../fetch/loginApi.js";
 
 export async function submitSignup(dto) {
+  const { email, nickname, password } = dto;
   const res = await signin({
     email: email.value.trim(),
     nickname: nickname.value.trim(),
@@ -16,5 +17,5 @@ export async function submitSignup(dto) {
   updateSubmit();
 }
 
-export async function submitPasswordUpdate(params) {}
-export async function submitProfileUpdate(params) {}
+export async function submitPasswordUpdate(dto) {}
+export async function submitProfileUpdate(dto) {}

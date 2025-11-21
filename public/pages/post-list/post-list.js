@@ -1,4 +1,4 @@
-import { getPostlist } from "../../api/postListApi.js";
+import { getPostlist } from "../../fetch/postListApi.js";
 
 const endNode = document.getElementById("sentinel");
 const pNode = document.getElementById("postList");

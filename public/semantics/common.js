@@ -1,5 +1,5 @@
-import { logout } from "../api/loginApi.js";
-import { getAccessToken } from "../api/sessionStorage.js";
+import { logout } from "../fetch/loginApi.js";
+import { getAccessToken } from "../fetch/sessionStorage.js";
 
 const pages = {
   NON_AUTH: ["signin", "login"],

@@ -1,5 +1,4 @@
-import { authClient } from "../../api/apiClient.js";
-import { BASE_URL } from "../../api/config.js";
+import { authClient } from "../../fetch/apiClient.js";
 import {
   submitPasswordUpdate,
   submitProfileUpdate,

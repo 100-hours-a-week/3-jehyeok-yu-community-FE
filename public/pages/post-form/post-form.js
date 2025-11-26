@@ -1,5 +1,5 @@
-import { authClient } from "../../api/apiClient.js";
-import { createPost, updatePost } from "../../api/postFormApi.js";
+import { authClient } from "../../fetch/apiClient.js";
+import { createPost, updatePost } from "../../fetch/postFormApi.js";
 const pNode = document.querySelector(".compose");
 const target = new URLSearchParams(window.location.search).get("postId");
 

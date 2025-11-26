@@ -1,4 +1,4 @@
-import { getPost } from "../../api/postApi.js";
+import { getPost } from "../../fetch/postApi.js";
 
 const createPostTemplate = (dto) => `<h1 class="post-title">${dto.title}</h1>
 

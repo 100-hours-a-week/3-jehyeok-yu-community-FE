@@ -1,5 +1,4 @@
-import { login } from "../../api/loginApi.js";
-import { getAccessToken } from "../../api/sessionStorage.js";
+import { login } from "../../fetch/loginApi.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const email = document.getElementById("email");

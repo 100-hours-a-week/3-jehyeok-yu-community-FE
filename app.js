@@ -11,7 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// 정적 파일 루트
 app.use(express.static(path.join(__dirname, "public")));
 
 // 정적파일 사전 검증 로직 필요
@@ -23,6 +22,21 @@ const PAGES = [
   "/post-list",
   "/404",
 ];
+
+// 정적 js로 필요한 값 가져오는 동작, be url을 express에서 관리하기 위해 여기에 작성.
+app.get("/config.js", (req, res) => {
+  const baseUrl =
+    process.env.BASE_URL ??
+    (process.env.NODE_ENV === "production" ? "/api" : "http://localhost:8080");
+
+  res
+    .type("application/javascript")
+    .send(`export const BASE_URL = ${JSON.stringify(baseUrl)};`);
+});
+
+app.get("/favicon.ico", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "assets", "favicon.ico"));
+});
 
 app.use(PAGES, (req, res) => {
   const name = req.baseUrl.slice(1); // "/login" -> "login"

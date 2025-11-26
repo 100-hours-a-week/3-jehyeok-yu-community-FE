@@ -43,7 +43,7 @@ jobs:
 
       - name: ssh 로그인 및 도커 pull and up
         run: |
-          ssh -i ~/.ssh/id_rsa StrictHostKeyChecking=yes ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} >> EOF
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=yes ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << EOF
             cd /home/${{ secrets.SERVER_USER }}/compose/app
             docker compose pull community-fe
             docker compose up community-fe

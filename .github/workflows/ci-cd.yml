@@ -19,7 +19,7 @@ jobs:
         run: |
 
       - name: docker build
-        uses: docker/login-actions@v3
+        uses: docker/login-action@v3
         with:
           registry: registry.${{ secrets.SERVER_HOST }}
           username: ${{ secrets.DOCKER_USER }}

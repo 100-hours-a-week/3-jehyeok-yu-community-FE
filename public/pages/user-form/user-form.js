@@ -1,4 +1,5 @@
 import { authClient } from "../../fetch/apiClient.js";
+import { emptyTemplate, ProfileUploader } from "./image.js";
 import {
   submitPasswordUpdate,
   submitProfileUpdate,
@@ -89,6 +90,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
   });
+
+  let profileUploader = null;
+  const profileSection = document.getElementById("sectionProfileImage");
+  if (profileSection) {
+    profileSection.innerHTML = emptyTemplate();
+
+    elements.profileInput = document.getElementById("profile");
+    elements.previewEl = document.getElementById("preview");
+    elements.plusEl = document.getElementById("plus");
+    elements.removeBtnEl = document.getElementById("removeBtn");
+    elements.helperProfileEl = document.querySelector(
+      "#sectionProfileImage .helper"
+    );
+
+    // 업로더 객체 생성
+    profileUploader = new ProfileUploader(profileSection, {
+      onImageChange: (imageId) => {
+        elements.profileImageId = imageId; // 필요하면 검증/제출에서 사용
+        refreshButton();
+      },
+    });
+    profileUploader.setUrl();
+  }
+
   if (mode !== "signup" && elements.emailSection) {
     const res = await authClient.get("/users/me");
     const dto = await res.json();
@@ -152,6 +177,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     e.preventDefault();
     refreshButton();
     if (submitBtn.disabled) return;
+    elements.image = profileUploader.getImageDto();
     await submitHandler(elements);
   });
 });

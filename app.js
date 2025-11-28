@@ -28,10 +28,13 @@ app.get("/config.js", (req, res) => {
   const baseUrl =
     process.env.BASE_URL ??
     (process.env.NODE_ENV === "production" ? "/api" : "http://localhost:8080");
+  const imageUrl =
+    process.env.IMAGE_URL ??
+    (process.env.NODE_ENV === "production" ? "/api" : "http://localhost:8080");
 
-  res
-    .type("application/javascript")
-    .send(`export const BASE_URL = ${JSON.stringify(baseUrl)};`);
+  res.type("application/javascript")
+    .send(`export const BASE_URL = ${JSON.stringify(baseUrl)};
+    export const IMAGE_URL = ${JSON.stringify(imageUrl)};`);
 });
 
 app.get("/favicon.ico", (req, res) => {

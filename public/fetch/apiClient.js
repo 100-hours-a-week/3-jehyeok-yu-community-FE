@@ -1,4 +1,4 @@
-import { BASE_URL } from "/config.js";
+import { BASE_URL, IMAGE_URL } from "/config.js";
 import {
   deleteAccessToken,
   getAccessToken,
@@ -19,14 +19,16 @@ const makeWithBody =
       body: typeof body === "string" ? body : JSON.stringify(body),
     });
 
-async function baseFetch(path, opt = {}) {
+async function baseFetch(path, opt = {}, mode = "b") {
   const headers = {
     "Content-Type": "application/json",
     ...(opt.headers || {}),
   };
 
   try {
-    const res = await fetch(BASE_URL + path, { ...opt, headers });
+    const REQUEST_URL =
+      mode === "b" ? BASE_URL : mode === "m" ? IMAGE_URL : BASE_URL;
+    const res = await fetch(REQUEST_URL + path, { ...opt, headers });
 
     if (res.status >= 500) {
       alert("서버 에러가 발생했습니다. 잠시 후 접속해주세요.");

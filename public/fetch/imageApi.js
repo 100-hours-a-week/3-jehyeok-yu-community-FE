@@ -5,6 +5,7 @@ export class ImageHandler {
     this.presignedPatchUrl = undefined;
     this.objectKey = undefined;
     this.file = undefined;
+    this.status = false;
   }
 
   async setUrl() {
@@ -46,11 +47,18 @@ export class ImageHandler {
 
       if (res.ok) {
         console.log("파일 업로드 성공");
+        this.status = true;
+        return;
       } else {
         console.error("파일 업로드 실패:", res.status, res.statusText);
       }
     } catch (err) {
       console.error("업로드 중 오류:", err);
     }
+    this.status = false;
+  }
+
+  ok() {
+    return this.status;
   }
 }

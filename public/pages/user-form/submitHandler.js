@@ -14,8 +14,6 @@ export async function submitSignup(dto) {
   } else {
     alert("회원가입에 실패했습니다.");
   }
-
-  updateSubmit();
 }
 
 export async function submitPasswordUpdate(dto) {}

@@ -46,7 +46,7 @@ export class ProfileUploader {
     this.removeBtn.style.display = "none";
     this.input.value = "";
     this.imageId = "default";
-    this.imageOrigianlName = "default";
+    this.imageOriginalName = "default";
 
     if (this.onImageChange) this.onImageChange(null);
   }
@@ -67,7 +67,7 @@ export class ProfileUploader {
     }
     const formData = new FormData();
     formData.append("image", file);
-    this.imageOrigianlName = file.name;
+    this.imageOriginalName = file.name;
     this.imageHandler.setFile(formData);
     await this.imageHandler.push();
 
@@ -83,9 +83,11 @@ export class ProfileUploader {
   }
 
   getImageDto() {
-    return {
-      originalName: this.imageOrigianlName,
-      objectKey: this.imageId,
-    };
+    return this.imageHandler.ok()
+      ? {
+          originalName: this.imageOriginalName,
+          objectKey: this.imageId,
+        }
+      : null;
   }
 }

@@ -18,10 +18,10 @@ export class ProfileUploader {
     this.helper = root.querySelector(".helper");
     this.removeBtn = root.querySelector("#removeBtn");
 
-    this.imageId = null;
+    this.imageId = "defualt";
     this.onImageChange = onImageChange;
     this.imageHandler = new ImageHandler();
-    this.imageOrigianlName = "";
+    this.imageOrigianlName = "default";
     this.initEvents();
   }
 
@@ -45,8 +45,8 @@ export class ProfileUploader {
     this.helper.style.display = "block";
     this.removeBtn.style.display = "none";
     this.input.value = "";
-    this.imageId = null;
-    this.imageOrigianlName = "";
+    this.imageId = "default";
+    this.imageOrigianlName = "default";
 
     if (this.onImageChange) this.onImageChange(null);
   }
@@ -60,6 +60,11 @@ export class ProfileUploader {
       return;
     }
 
+    if (file.name === "default") {
+      alert("default를 파일명을 가진 사진은 업로드가 불가능합니다.");
+      this.renderEmpty();
+      return;
+    }
     const formData = new FormData();
     formData.append("image", file);
     this.imageOrigianlName = file.name;

@@ -1,27 +1,6 @@
-import { logout } from "../fetch/loginApi.js";
-import { getAccessToken } from "../fetch/sessionStorage.js";
-
-const pages = {
-  NON_AUTH: ["signin", "login"],
-};
+import { AvatarComponent } from "./header/avatar.js";
 
 const HOME = "post-list";
-const LOGIN = "login";
-
-(function () {
-  const at = getAccessToken(); // 콜백 함수로 이후 기능 구현 필요
-  const goto = (url, msg) => {
-    if (msg) alert(msg);
-    if (url === currentPath) return;
-    window.location.href = `/${url}`;
-  };
-
-  const currentPath = window.location.pathname.split("/")[1];
-  const isNon = pages.NON_AUTH.includes(currentPath);
-  if (isNon && at) goto(HOME, "로그인 된 상태입니다. 홈으로 이동합니다.");
-})();
-let avatar;
-let dropdown;
 
 async function insertHeader() {
   const mount = document.getElementById("app-header");
@@ -36,20 +15,11 @@ async function insertHeader() {
   mount.appendChild(t.content.firstElementChild);
 
   const titleText = document.querySelector(".h-title");
-  const token = getAccessToken();
-  avatar = document.getElementById("h-avatar");
-  if (token) {
-    dropdown = document.querySelector("#profileMenu");
-
-    const logoutBtn = document.querySelector("#menuLogout");
-    logoutBtn.addEventListener("click", logout);
-  } else {
-    avatar.hidden = true;
-  }
   titleText.addEventListener("click", (e) => {
-    window.location.href = getAccessToken() ? HOME : LOGIN;
+    window.location.href = `${window.location.origin}/${HOME}`;
   });
 }
+
 document.addEventListener("DOMContentLoaded", async () => {
   await insertHeader();
   await (async function () {
@@ -62,9 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     t.innerHTML = html.trim();
     mount.appendChild(t.content.firstElementChild);
   })();
-  avatar.addEventListener("click", (e) => {
-    dropdown.hidden = !dropdown.hidden;
-    const expended = e.target.attributes["aria-expanded"].value;
-    e.target.setAttribute("aria-expanded", String(!expended));
-  });
+
+  const avatar = new AvatarComponent(".h-actions");
+  avatar.init();
 });

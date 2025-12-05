@@ -1,4 +1,4 @@
-import { BASE_URL } from "/config.js";
+import { authClient } from "./apiClient.js";
 
 export class ImageHandler {
   constructor() {
@@ -8,8 +8,8 @@ export class ImageHandler {
     this.status = false;
   }
 
-  async setUrl() {
-    const res = await fetch(BASE_URL + "/images/url");
+  async setUrl(mode = "profile") {
+    const res = await authClient.get(`/images/url?mode=${mode}`);
     if (!res.ok) {
       console.error("프리사인 URL 발급 실패");
       return;

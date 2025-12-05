@@ -1,5 +1,6 @@
 import { authClient } from "../../fetch/apiClient.js";
 import { createPost, updatePost } from "../../fetch/postFormApi.js";
+import { ImageHandler } from "../../fetch/imageApi.js";
 const pNode = document.querySelector(".compose");
 const target = new URLSearchParams(window.location.search).get("postId");
 
@@ -72,6 +73,48 @@ document.addEventListener("DOMContentLoaded", async () => {
   const content = document.getElementById("content");
   const submitButton = document.getElementById("submitButton");
 
+  // 이미지 업로드 관련
+  const imageInput = document.getElementById("image");
+  const fileName = document.getElementById("fileName");
+  const imageHandler = new ImageHandler();
+  let selectedFile = null;
+  let imageObjectKey = null;
+
+  // 이미지 파일 선택 이벤트
+  imageInput.addEventListener("change", async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      fileName.textContent = "파일을 선택해주세요.";
+      selectedFile = null;
+      imageObjectKey = null;
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("이미지만 업로드 해주세요.");
+      imageInput.value = "";
+      fileName.textContent = "파일을 선택해주세요.";
+      selectedFile = null;
+      imageObjectKey = null;
+      return;
+    }
+
+    selectedFile = file;
+    fileName.textContent = file.name;
+
+    // presigned URL 발급받기
+    try {
+      imageObjectKey = await imageHandler.setUrl("post");
+      console.log("Presigned URL 발급 완료:", imageObjectKey);
+    } catch (error) {
+      console.error("Presigned URL 발급 실패:", error);
+      alert("이미지 업로드 준비에 실패했습니다.");
+      selectedFile = null;
+      imageObjectKey = null;
+      fileName.textContent = "파일을 선택해주세요.";
+    }
+  });
+
   const helperOf = (input) => input.closest(".field")?.querySelector(".helper");
 
   function setHelper(input, msg, state) {
@@ -125,11 +168,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     validateContent();
     updateSubmit();
   });
-  submitButton.addEventListener("click", (e) => {
+  submitButton.addEventListener("click", async (e) => {
+    // 이미지 업로드 처리
+    if (selectedFile && imageObjectKey) {
+      try {
+        imageHandler.setFile(selectedFile);
+        await imageHandler.push();
+
+        if (!imageHandler.ok()) {
+          alert("이미지 업로드에 실패했습니다.");
+          return;
+        }
+        console.log("이미지 업로드 완료");
+      } catch (error) {
+        console.error("이미지 업로드 중 오류:", error);
+        alert("이미지 업로드에 실패했습니다.");
+        return;
+      }
+    }
+
+    // 게시글 데이터 구성
     const body = {
       title: title.value.trim(),
       content: content.value.trim(),
     };
+
+    // 이미지가 업로드되었다면 objectKey 추가
+    if (selectedFile && imageHandler.ok()) {
+      body.image = {
+        objectKey: imageObjectKey,
+        originalName: selectedFile.name,
+      };
+    }
+
+    // 게시글 생성/수정
     target ? updatePost(target, body) : createPost(body);
   });
 });

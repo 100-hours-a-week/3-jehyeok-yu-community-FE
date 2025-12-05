@@ -114,9 +114,8 @@ async function loadAndFetch() {
     console.log(ele);
     avatarComp.init();
 
-    // 백엔드에서 제공하는 thumbnailPath 사용 (이미 S3 URL)
+    // 백엔드에서 제공하는 thumbnailPath 사용
     const thumbnailPath = ele.authorThumbNailDto.thumbnailPath;
-    // thumbnailPath가 없거나 빈 문자열이면 API로 프로필 조회
     avatarComp.loadPostAvatar(thumbnailPath);
   });
 

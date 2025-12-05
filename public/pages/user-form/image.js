@@ -65,10 +65,8 @@ export class ProfileUploader {
       this.renderEmpty();
       return;
     }
-    const formData = new FormData();
-    formData.append("image", file);
     this.imageOriginalName = file.name;
-    this.imageHandler.setFile(formData);
+    this.imageHandler.setFile(file);
     await this.imageHandler.push();
 
     if (this.blobUrl) URL.revokeObjectURL(this.blobUrl);

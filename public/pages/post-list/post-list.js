@@ -1,4 +1,5 @@
 import { getPostlist } from "../../fetch/postListApi.js";
+import { AvatarComponent } from "../../semantics/header/avatar.js";
 
 const endNode = document.getElementById("sentinel");
 const pNode = document.getElementById("postList");
@@ -13,23 +14,27 @@ const createTemplate = ({
   clickCount,
   userId,
   authNickname,
-}) => `<article class="post-card" id="post_${postId}">
-          <div class="card-head" >
-            <h3 class="title">${title}</h3>
-            <time class="time">${createdAt}</time>
-          </div>
+}) => {
+  return `
+    <article class="post-card" id="post_${postId}">
+      <div class="card-head">
+        <h3 class="title">${title}</h3>
+        <time class="time">${createdAt}</time>
+      </div>
 
-          <div class="meta">
-            <span>좋아요 ${likeCount}</span>
-            <span>댓글 ${commentCount}</span>
-            <span>조회수 ${clickCount}</span>
-          </div>
+      <div class="meta">
+        <span>좋아요 ${likeCount}</span>
+        <span>댓글 ${commentCount}</span>
+        <span>조회수 ${clickCount}</span>
+      </div>
 
-          <div class="card-foot">
-            <span class="avatar"></span>
-            <span class="author" id="user_${userId}">${authNickname}</span>
-          </div>
-        </article>`;
+      <div class="card-foot">
+        <span class="avatar"></span>
+        <span class="author" id="user_${userId}">${authNickname}</span>
+      </div>
+    </article>
+  `;
+};
 
 function checkNullAndUndefind(json) {
   return Object.entries(json).filter((e) => {
@@ -71,13 +76,13 @@ async function loadAndFetch() {
   const dto = await getPostlist(`/posts?${params}`);
 
   function calcTimeInCurrentTz(time) {
-    let createdAt = new Date(time).toLocaleString();
-    return createdAt;
+    return new Date(time).toLocaleString();
   }
+
   dto.posts.forEach((ele) => {
-    const postCard = document.createElement("article");
-    let user = ele.authorThumbNailDto;
-    let template = createTemplate({
+    const user = ele.authorThumbNailDto;
+
+    const template = createTemplate({
       postId: ele.postId,
       title: ele.title,
       likeCount: ele.postLike,
@@ -89,14 +94,32 @@ async function loadAndFetch() {
       thumbNailPath: ele.thumbNailPath,
     });
 
-    postCard.className = "post-card";
-    postCard.innerHTML = template;
+    pNode.insertAdjacentHTML("beforeend", template);
+
+    // 방금 추가된 카드 가져오기
+    const postCard = document.getElementById(`post_${ele.postId}`);
+
     postCard.addEventListener("click", (e) => {
       e.preventDefault();
       window.location.href = `/post/${ele.postId}`;
     });
-    pNode.appendChild(postCard);
+
+    const selector = `#post_${ele.postId} .avatar`;
+    const avatarComp = new AvatarComponent(selector, {
+      useDropdown: false,
+      onAvatarClick: () => {
+        window.location.href = `/users/${user.userId}`;
+      },
+    });
+    console.log(ele);
+    avatarComp.init();
+
+    // 백엔드에서 제공하는 thumbnailPath 사용 (이미 S3 URL)
+    const thumbnailPath = ele.authorThumbNailDto.thumbnailPath;
+    // thumbnailPath가 없거나 빈 문자열이면 API로 프로필 조회
+    avatarComp.loadPostAvatar(thumbnailPath);
   });
+
   hasNext = dto.hasNext;
   if (hasNext) {
     lastReadId = dto.lastPostId || null;
@@ -111,5 +134,3 @@ async function observeLoadFetch(entries) {
   await loadAndFetch();
   isLoading = false;
 }
-
-// document.addEventListener("DOMContentLoaded", () => loadAndFetch());

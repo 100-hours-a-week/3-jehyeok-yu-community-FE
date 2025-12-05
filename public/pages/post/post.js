@@ -1,6 +1,16 @@
 import { getPost } from "../../fetch/postApi.js";
+import { AvatarComponent } from "../../semantics/header/avatar.js";
 
-const createPostTemplate = (dto) => `<h1 class="post-title">${dto.title}</h1>
+const createPostTemplate = (dto) => {
+  const hasImage = !!dto.postImagePath;
+
+  const imageSection = hasImage
+    ? `<figure class="post-image">
+        <img src="${dto.postImagePath}" alt="게시글 이미지" class="post-image-content" />
+      </figure>`
+    : "";
+
+  return `<h1 class="post-title">${dto.title}</h1>
 
         <div class="post-meta">
           <div class="author">
@@ -22,7 +32,9 @@ const createPostTemplate = (dto) => `<h1 class="post-title">${dto.title}</h1>
           </div>
         </div>
 
-        <figure class="post-image"><!-- 이미지 자리 --></figure>
+        ${imageSection}
+            <p><br/></p>
+            <p><br/></p>
 
         <div class="post-body">${dto.content}</div>
 
@@ -43,6 +55,7 @@ const createPostTemplate = (dto) => `<h1 class="post-title">${dto.title}</h1>
             }</span><span class="label">댓글</span>
           </li>
         </ul>`;
+};
 
 document.addEventListener("DOMContentLoaded", async () => {
   const parsedPath = window.location.pathname.split("/");
@@ -51,4 +64,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   const postNode = document.querySelector(".post");
 
   postNode.innerHTML = createPostTemplate(dto.data);
+  postNode.classList.toggle("has-image", dto.postImagePath);
+  postNode.classList.toggle("no-image", !dto.postImagePath);
+  // 게시글 작성자의 아바타 컴포넌트 초기화
+  const avatarSelector = ".post .avatar";
+  const avatarComp = new AvatarComponent(avatarSelector, {
+    useDropdown: false,
+    onAvatarClick: () => {
+      window.location.href = `/users/${dto.data.authorId}`;
+    },
+  });
+  avatarComp.init();
+  avatarComp.loadPostAvatar(dto.data.authorThumbnailPath);
 });

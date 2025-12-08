@@ -18,10 +18,11 @@ export class ProfileUploader {
     this.helper = root.querySelector(".helper");
     this.removeBtn = root.querySelector("#removeBtn");
 
-    this.imageId = "defualt";
+    this.imageId = "default";
     this.onImageChange = onImageChange;
     this.imageHandler = new ImageHandler();
-    this.imageOrigianlName = "default";
+    this.imageOriginalName = "default";
+    this.hasExistingImage = false;
     this.initEvents();
   }
 
@@ -30,8 +31,8 @@ export class ProfileUploader {
     this.removeBtn.addEventListener("click", () => this.renderEmpty());
   }
 
-  async setUrl() {
-    this.imageId = await this.imageHandler.setUrl();
+  async setUrl(mode = "profile", method = "get") {
+    this.imageId = await this.imageHandler.setUrl(mode, method);
   }
 
   renderEmpty() {
@@ -80,7 +81,28 @@ export class ProfileUploader {
     if (this.onImageChange) this.onImageChange(this.imageId);
   }
 
+  // 기존 프로필 이미지 로드
+  loadExistingImage(presignedUrl, objectKey, originalName = "profile") {
+    if (!presignedUrl) return;
+
+    this.preview.style.backgroundImage = `url('${presignedUrl}')`;
+    this.helper.style.display = "none";
+    this.plus.style.display = "none";
+    this.removeBtn.style.display = "block";
+
+    this.imageId = objectKey;
+    this.imageOriginalName = originalName;
+    this.hasExistingImage = true;
+
+    if (this.onImageChange) this.onImageChange(this.imageId);
+  }
+
   getImageDto() {
+    // 새 이미지가 업로드된 경우에만 반환 (기존 이미지가 로드된 상태에서는 null)
+    if (this.hasExistingImage && !this.imageHandler.ok()) {
+      return null;
+    }
+
     return this.imageHandler.ok()
       ? {
           originalName: this.imageOriginalName,

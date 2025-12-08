@@ -79,6 +79,45 @@
   font-weight: 600;
 }
 
+/* 로딩 스피너 */
+#loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  gap: 12px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #6366f1;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.loading-text {
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 끝 메시지 */
+#end-of-list {
+  text-align: center;
+  padding: 24px 16px;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* 반응형 */
 @media (max-width: 600px) {
   .intro {

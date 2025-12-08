@@ -244,3 +244,44 @@
   display: block;
   object-fit: cover;
 }
+
+/* 좋아요 버튼 스타일 */
+.like-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: inherit;
+  color: inherit;
+  transition: transform 0.1s ease;
+}
+
+.like-btn:hover {
+  transform: scale(1.1);
+}
+
+.like-btn:active {
+  transform: scale(0.95);
+}
+
+.like-btn.liked .heart-icon {
+  filter: drop-shadow(0 0 4px rgba(255, 0, 0, 0.5));
+}
+
+.like-btn .heart-icon {
+  font-size: 1.2em;
+  transition: transform 0.2s ease;
+}
+
+.like-btn.liked .heart-icon {
+  animation: heartPulse 0.6s ease;
+}
+
+@keyframes heartPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}

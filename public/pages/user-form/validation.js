@@ -29,7 +29,7 @@ const nickRe = /^[A-Za-z0-9가-힣]{2,10}$/;
 
 // 단일 필드 validate 함수들
 export function validateEmail(emailEl) {
-  if (!emailEl) return true; // 모드에 따라 없을 수 있음
+  if (!emailEl) return true;
   const v = emailEl.value.trim();
   if (!v) return setFail(emailEl, "이메일을 입력하세요.");
   if (!emailRe.test(v))
@@ -38,7 +38,7 @@ export function validateEmail(emailEl) {
 }
 
 export function validatePassword(passwordEl, passwordConfirmEl) {
-  if (!passwordEl) return true; // 이 모드에서는 비밀번호 안 쓸 수도 있음
+  if (!passwordEl) return true;
   const v = passwordEl.value;
   if (!v) return setFail(passwordEl, "비밀번호를 입력하세요.");
   if (v.length < pwLenMin || v.length > pwLenMax) {

@@ -43,7 +43,12 @@ export class AvatarComponent {
   }
 
   init() {
-    this.mount = document.querySelector(this.targetSelector);
+    if (this.targetSelector instanceof Element) {
+      this.mount = this.targetSelector;
+    } else {
+      this.mount = document.querySelector(this.targetSelector);
+    }
+
     if (!this.mount) {
       console.error(
         "AvatarComponent mount 요소가 없습니다.",

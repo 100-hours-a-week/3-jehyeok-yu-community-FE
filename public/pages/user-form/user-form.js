@@ -107,16 +107,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 업로더 객체 생성
     profileUploader = new ProfileUploader(profileSection, {
       onImageChange: (imageId) => {
-        elements.profileImageId = imageId; // 필요하면 검증/제출에서 사용
+        elements.profileImageId = imageId;
         refreshButton();
       },
     });
-    profileUploader.setUrl();
+
+    // 프로필 모드에 따라 다른 메소드 사용
+    const imageMethod = mode === "profile" ? "patch" : "get";
+    profileUploader.setUrl("profile", imageMethod);
   }
 
   if (mode !== "signup" && elements.emailSection) {
-    const res = await authClient.get("/users/me");
-    const dto = await res.json();
+    const res = await authClient.get("/users/profile/me");
+    const responseData = await res.json();
+    const dto = responseData.data;
     if (elements.emailDupButton) {
       elements.emailDupButton.style.display = "none";
     }
@@ -132,8 +136,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       email.placeholder = dto?.email;
     }
 
-    if (mode === "profile" && elements.nickname) {
-      elements.nickname.textContent = dto?.nickname | undefined;
+    if (mode === "profile") {
+      // 이메일 값 설정 (readonly이므로 placeholder로 표시)
+      if (elements.email) {
+        const email = dto?.email || "";
+        elements.email.placeholder = email;
+        elements.email.value = "";
+      }
+
+      // 닉네임 값 설정
+      if (elements.nickname) {
+        const nickname = dto?.nickname || "";
+        elements.nickname.value = nickname;
+      }
+
+      // 기존 프로필 이미지 로드 (기본 프로필이 아니고 imagePath가 있을 때만)
+      const imagePath = dto?.imagePath;
+      const objectKey = dto?.objectKey;
+
+      // 기본 프로필이 아니고 imagePath가 있을 때만 로드
+      if (
+        profileUploader &&
+        imagePath &&
+        imagePath !== "public/image/profile/default-profile.png"
+      ) {
+        profileUploader.loadExistingImage(imagePath, objectKey, "profile");
+      }
     }
   }
   function refreshButton() {

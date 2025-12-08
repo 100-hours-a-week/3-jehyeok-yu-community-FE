@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch("/semantics/footer/footer.html");
     const html = await res.text();
     const t = document.createElement("template");
-    console.log(t);
     t.innerHTML = html.trim();
     mount.appendChild(t.content.firstElementChild);
   })();

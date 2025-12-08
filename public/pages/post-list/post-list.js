@@ -3,6 +3,7 @@ import { AvatarComponent } from "../../semantics/header/avatar.js";
 
 const endNode = document.getElementById("sentinel");
 const pNode = document.getElementById("postList");
+const loader = document.getElementById("loader");
 
 // a 태그로 화면전환 or click 이벤트 넣기
 const createTemplate = ({
@@ -64,9 +65,27 @@ function removeInvalidJson(json) {
 let lastReadId = null;
 let limit = 3;
 let hasNext = true;
+let isLoading = false;
+
+async function observeLoadFetch(entries) {
+  if (!entries[0] || !entries[0].isIntersecting || isLoading) return;
+  isLoading = true;
+
+  // lastReadId가 null이 아닐 때만 로딩 표시 (첫 로딩 때는 표시하지 않음)
+  if (lastReadId !== null) {
+    loader.style.display = "flex";
+  }
+
+  await loadAndFetch();
+  isLoading = false;
+
+  // 로딩 완료 후 숨김
+  loader.style.display = "none";
+}
+
+// observer 생성 및 설정
 let observer = new IntersectionObserver(observeLoadFetch);
 observer.observe(endNode);
-let isLoading = false;
 
 async function loadAndFetch() {
   if (!hasNext) return;
@@ -111,10 +130,8 @@ async function loadAndFetch() {
         window.location.href = `/users/${user.userId}`;
       },
     });
-    console.log(ele);
     avatarComp.init();
 
-    // 백엔드에서 제공하는 thumbnailPath 사용
     const thumbnailPath = ele.authorThumbNailDto.thumbnailPath;
     avatarComp.loadPostAvatar(thumbnailPath);
   });
@@ -122,14 +139,9 @@ async function loadAndFetch() {
   hasNext = dto.hasNext;
   if (hasNext) {
     lastReadId = dto.lastPostId || null;
+    if (lastReadId) {
+      observer.unobserve(endNode);
+      observer.observe(pNode.lastElementChild);
+    }
   }
-}
-
-// 지금은 더 불러올 것이 없다면, 더이상 불러올 수 없는 상황이 됨.
-// 추후 폴링이나, http 이외의 프로토콜을 쓴다면 상태 갱신으로 가능할듯.
-async function observeLoadFetch(entries) {
-  if (!entries[0].isIntersecting || isLoading) return;
-  isLoading = true;
-  await loadAndFetch();
-  isLoading = false;
 }

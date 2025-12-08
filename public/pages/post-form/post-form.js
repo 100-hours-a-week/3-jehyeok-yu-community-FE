@@ -104,8 +104,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // presigned URL 발급받기
     try {
-      imageObjectKey = await imageHandler.setUrl("post");
-      console.log("Presigned URL 발급 완료:", imageObjectKey);
+      // 수정 모드일 때는 patch 메소드와 postId 사용
+      if (target) {
+        imageObjectKey = await imageHandler.setUrl("post", "patch", target);
+      } else {
+        imageObjectKey = await imageHandler.setUrl("post");
+      }
     } catch (error) {
       console.error("Presigned URL 발급 실패:", error);
       alert("이미지 업로드 준비에 실패했습니다.");
@@ -153,12 +157,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       helperOf(title)?.classList.contains("ok") &&
       helperOf(content)?.classList.contains("ok");
     submitButton.disabled = !valid;
-    submitButton.style.backgroundColor = valid ? "#7F6AEE" : "#ACAOEB"; // 색상 변경
+    submitButton.style.backgroundColor = valid ? "#7F6AEE" : "#ACAOEB";
   }
 
   validateContent();
   validateTitle();
   updateSubmit();
+
   // addEventListner
   title.addEventListener("input", (e) => {
     validateTitle();
@@ -179,7 +184,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           alert("이미지 업로드에 실패했습니다.");
           return;
         }
-        console.log("이미지 업로드 완료");
       } catch (error) {
         console.error("이미지 업로드 중 오류:", error);
         alert("이미지 업로드에 실패했습니다.");

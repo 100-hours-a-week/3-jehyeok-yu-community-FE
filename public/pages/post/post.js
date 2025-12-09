@@ -31,14 +31,16 @@ const createPostTemplate = (dto) => {
               ).toLocaleDateString()}</time>
             </div>
           </div>
-          <div class="post-actions ${dto.owner ? "" : "hide"}">
-            <a class="btn ghost" href="/post-form?postId=${
-              dto.postId
-            }" id="btnEdit"
+          ${
+            dto.owner
+              ? `<div class="post-actions">
+            <a class="btn ghost" href="/post-form?postId=${dto.postId}" id="btnEdit"
               >수정</a
             >
             <button class="btn danger" id="btnDelete">삭제</button>
-          </div>
+          </div>`
+              : ""
+          }
         </div>
 
         ${imageSection}

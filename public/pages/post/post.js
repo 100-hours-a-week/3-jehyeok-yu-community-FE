@@ -228,7 +228,7 @@ async function loadComments(postId) {
             },
           });
           commentAvatar.init();
-          commentAvatar.loadAvatar(comment.authorThumbnailPath);
+          commentAvatar.loadPostAvatar(comment.authorThumbnailPath);
         }
 
         // 수정/삭제 버튼 이벤트 (본인 댓글일 경우에만)

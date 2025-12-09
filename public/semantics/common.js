@@ -1,5 +1,5 @@
 import { AvatarComponent } from "./header/avatar.js";
-
+import { BASE_URL } from "/config.js";
 const HOME = "post-list";
 
 async function insertHeader() {
@@ -30,6 +30,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     const t = document.createElement("template");
     t.innerHTML = html.trim();
     mount.appendChild(t.content.firstElementChild);
+
+    // footer 링크들을 BASE_URL로 설정
+    const footerLinks = document.querySelectorAll("#app-footer .f-link");
+    const termsLink = footerLinks[0];
+    const privacyLink = footerLinks[1];
+
+    if (termsLink) {
+      termsLink.setAttribute("href", BASE_URL + "/terms");
+    }
+    if (privacyLink) {
+      privacyLink.setAttribute("href", BASE_URL + "/privacy");
+    }
   })();
 
   const avatar = new AvatarComponent(".h-actions");

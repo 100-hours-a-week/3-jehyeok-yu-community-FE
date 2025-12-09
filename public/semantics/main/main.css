@@ -15,7 +15,8 @@ body {
 }
 body {
   margin: 0;
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: url("/assets/background_half.jpg") no-repeat center center fixed;
+  background-size: cover;
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -30,7 +31,7 @@ main {
   min-height: calc(100dvh - var(--header-h));
 
   /* 살짝 떠있는 효과 */
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }
